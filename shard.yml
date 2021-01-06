@@ -1,0 +1,9 @@
+name: expiring_hash
+version: 0.1.0
+
+authors:
+  - lun-4 <crystal@l4.pm>
+
+crystal: 0.35.1
+
+license: MIT
