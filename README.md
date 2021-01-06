@@ -1,6 +1,6 @@
 # expiring_hash
 
-TODO: Write a description here
+Inspired by [expiringdict](https://github.com/mailgun/expiringdict)
 
 ## Installation
 
@@ -9,7 +9,7 @@ TODO: Write a description here
    ```yaml
    dependencies:
      expiring_hash:
-       github: your-github-user/expiring_hash
+       github: lun-4/expiring_hash
    ```
 
 2. Run `shards install`
@@ -18,13 +18,16 @@ TODO: Write a description here
 
 ```crystal
 require "expiring_hash"
+
+alias MyCoolCache = ExpiringHash(String, String)
+
+# hash entries can be kept inside the expiring hash for more than 5 minutes,
+# trying to access those entires will mean their deletion, though.
+my_cool_cache = MyCoolCache.new(5.minutes)
+
+# use as any hash
+my_cool_cache["a"] = "b"
 ```
-
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
 
 ## Contributing
 
