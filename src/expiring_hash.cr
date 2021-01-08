@@ -2,16 +2,36 @@ class ExpiringHash(KeyT, ValueT)
   # backing hash
   property hash : Hash(KeyT, Tuple(Time, ValueT))
 
-  # properties about the expiration of values inside the hash
+  # hash properties
   property expiry_period : Time::Span
+  property max_items : Int
 
-  # Create a new expiring hash.
-  def initialize(@expiry_period : Time::Span)
+  # create a new expiring hash
+  def initialize(@max_items : Int, @expiry_period : Time::Span)
     @hash = Hash(KeyT, Tuple(Time, ValueT)).new
   end
 
   def []=(key : KeyT, value : ValueT)
     timestamp = Time.utc
+
+    if hash.size >= @max_items
+      freed = false
+
+      @hash.each do |key, value|
+        # try to fetch the key via the maybe-invalidate logic
+        # and if the value got invalidated, we are sure that we have one entry
+        # free in the hash to put things in
+        unwrapped_value = maybe_value(key, value)
+        if unwrapped_value.nil?
+          freed = true
+        end
+      end
+
+      if !freed
+        raise "hash too full"
+      end
+    end
+
     hash[key] = {timestamp, value}
   end
 
