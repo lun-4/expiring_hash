@@ -30,4 +30,13 @@ describe ExpiringHash do
     hash[1]?.should eq nil
     hash[2].should eq 3
   end
+
+  it "doesnt clean when max size is nil" do
+    hash = ExpiringHash(Int32, Int32).new(nil, 1.seconds)
+    hash[1] = 2
+    hash[1].should eq 2
+
+    hash[2] = 3
+    hash[2].should eq 3
+  end
 end

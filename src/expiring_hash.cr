@@ -4,17 +4,17 @@ class ExpiringHash(KeyT, ValueT)
 
   # hash properties
   property expiry_period : Time::Span
-  property max_items : Int32
+  property max_items : Int32?
 
   # create a new expiring hash
-  def initialize(@max_items : Int, @expiry_period : Time::Span)
+  def initialize(@max_items : Int32?, @expiry_period : Time::Span)
     @hash = Hash(KeyT, Tuple(Time, ValueT)).new
   end
 
   def []=(key : KeyT, value : ValueT)
     timestamp = Time.utc
 
-    if hash.size >= @max_items
+    if @max_items != nil && hash.size >= (@max_items || 0)
       freed = false
 
       @hash.each do |key, value|
