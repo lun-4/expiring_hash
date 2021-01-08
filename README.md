@@ -23,7 +23,12 @@ alias MyCoolCache = ExpiringHash(String, String)
 
 # hash entries can be kept inside the expiring hash for more than 5 minutes,
 # trying to access those entires will mean their deletion, though.
-my_cool_cache = MyCoolCache.new(5.minutes)
+#
+# if the hash has more than 10 times, all entries that should be deleted will be.
+# the insert operation will fail if no entries are invalidated
+#
+# set max_items to `nil` to remove this behavior
+my_cool_cache = MyCoolCache.new(10, 5.minutes)
 
 # use as any hash
 my_cool_cache["a"] = "b"
