@@ -4,7 +4,7 @@ class ExpiringHash(KeyT, ValueT)
 
   # hash properties
   property expiry_period : Time::Span
-  property max_items : Int
+  property max_items : Int32
 
   # create a new expiring hash
   def initialize(@max_items : Int, @expiry_period : Time::Span)
